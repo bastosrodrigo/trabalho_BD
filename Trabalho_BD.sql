@@ -129,6 +129,24 @@ where id = 2
 
 
 
+
+-- SQL querry Pelo menos 2 com algum tipo de junção
+
+SELECT p.data_pedido,
+		c.nome_completo
+		FROM cliente c INNER JOIN 
+		pedido p ON 
+		p.id_cliente = c.id
+
+
+SELECT c.nome as nome_categoria,
+		p.nome as nome_produto
+		FROM categoria c INNER JOIN 
+		produto p ON 
+		p.id_categoria = c.id
+
+
+
 -- SQL Query Pelo menos 1 com usando count() e group by()
 
 select id, count(*)
@@ -139,6 +157,12 @@ where id in (select id
 group by id
 
 
+--Uma consulta livre
+
+select nome_completo 
+from cliente 
+where nome_completo like 'N%' 
 
 
+-- Nota fiscal 
 
