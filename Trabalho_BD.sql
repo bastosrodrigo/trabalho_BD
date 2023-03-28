@@ -129,6 +129,15 @@ where id = 2
 
 
 
+-- SQL Query Pelo menos 1 com usando count() e group by()
+
+select id, count(*)
+from cliente 
+where id in (select id
+					from cliente 
+					where nome_completo like '%A%')
+group by id
+
 
 
 
