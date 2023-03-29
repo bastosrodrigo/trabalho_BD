@@ -109,12 +109,15 @@ insert into categoria (nome,descricao) values
 ('computadores','estoque');
 
 insert into produto_pedido (id_produto,id_pedido,quantidade) values
-((select id from produo where nome_produto = 'Pedro' ),
-(select id from pedido where nome_completo = 'Nelson' ),5),
-(2,4),
-(3,2),
-(8,1),
-(1,5);
+((select id from produto where nome = 'Computador' ),9,3),
+((select id from produto where nome = 'Navio' ),10,5),
+((select id from produto where nome ='Carro'),11,4),
+((select id from produto where nome = 'Tesoura'),12,2),
+((select id from produto where nome ='Pá'),13,1)
+
+insert into produto_pedido (id_produto,id_pedido,quantidade) values
+((select id from produto where nome = 'Computador' ),10,3)
+
 
 --atualização em algum registro em uma tabela (DML)
 
@@ -181,4 +184,20 @@ where nome_completo like 'N%'
 
 
 -- Nota fiscal 
+
+select c.nome_completo,
+c.cpf,
+pedido.data_pedido as Data_pedido,
+produto_pedido.quantidade, 
+(produto_pedido.quantidade * produto.valor_unitario) as valor_nota 
+from cliente c
+inner join pedido on pedido.id_cliente = c.id
+inner join produto_pedido on produto_pedido.id_pedido = pedido.id
+inner join produto on produto.id = produto_pedido.id_produto 
+-- Selecionando nota fiscal de um cliente 
+--where c.nome_completo = 'Mario'
+--and pedido.data_pedido = '07/05/2022'
+
+
+
 
