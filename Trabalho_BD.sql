@@ -53,6 +53,11 @@ create table produto_pedido(
 	foreign key(id_pedido) references pedido(id)
 );
 
+alter table produto_pedido add column
+quantidade integer 
+
+
+
 --inserção de dados nas tabelas (pelo menos 5 registros em cada uma) (DML)
 
 
@@ -73,11 +78,21 @@ insert into funcionario (nome,cpf) values
 
 
 insert into pedido (data_pedido,id_funcionario,id_cliente) values
-('26/02/1997',1,1),
-('07/05/2022',2,5),
-('08/05/2015',5,3),
-('06/07/2015',2,3),
-('07/05/2015',4,3);
+('26/02/1997',
+(select id from funcionario where nome = 'Pedro' ),
+(select id from cliente where nome_completo = 'Nelson' )),
+('07/05/2022',
+(select id from funcionario where nome = 'João' ),
+(select id from cliente where nome_completo = 'Mario' )),
+('08/05/2015',
+(select id from funcionario where nome = 'Marcos' ),
+(select id from cliente where nome_completo = 'João' )),
+('06/07/2015',
+(select id from funcionario where nome = 'Francisco' ),
+(select id from cliente where nome_completo = 'Pedro' )),
+('07/05/2015',
+(select id from funcionario where nome = 'Marcos' ),
+(select id from cliente where nome_completo = 'Pedro' ));
 
 insert into produto (nome,descricao,quantidade_no_estoque,data_de_fabricacao,valor_unitario,id_categoria,id_funcionario) values
 ('Computador','Um belo computador',205,'14/02/1998',2500,1,2),
@@ -93,8 +108,9 @@ insert into categoria (nome,descricao) values
 ('alimentos','revenda'),
 ('computadores','estoque');
 
-insert into produto_pedido (id_produto,id_pedido) values
-(1,6),
+insert into produto_pedido (id_produto,id_pedido,quantidade) values
+((select id from produo where nome_produto = 'Pedro' ),
+(select id from pedido where nome_completo = 'Nelson' ),5),
 (2,4),
 (3,2),
 (8,1),
