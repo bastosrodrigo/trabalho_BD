@@ -199,9 +199,36 @@ inner join produto_pedido on produto_pedido.id_pedido = pedido.id
 inner join produto on produto.id = produto_pedido.id_produto 
 
 
-
 ------------ Consulta nota fiscal por código do produto --------------------
 
 select *
 from registro_nota 
 where código_pedido = 10
+
+update cliente 
+set cpf = '115.670.600-99'
+where id = 1
+
+update cliente 
+set cpf = '162.058.980-04'
+where id = 2
+
+
+update cliente 
+set cpf = '791.696.380-98'
+where id = 3
+
+
+update cliente 
+set cpf = '462.758.980-04'
+where id = 4
+
+update cliente 
+set cpf =  '069.264.910-70'
+where id = 5
+
+update cliente 
+set cpf =  '621.981.150-00'
+where id = 6
+
+
