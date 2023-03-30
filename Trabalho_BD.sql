@@ -183,21 +183,25 @@ from cliente
 where nome_completo like 'N%' 
 
 
--- Nota fiscal 
+----------------- Registro de nota fiscal ---------------------
 
-select c.nome_completo,
+create view registro_nota as select c.nome_completo,
 c.cpf,
+produto_pedido.id as código_pedido,
 pedido.data_pedido as Data_pedido,
-produto_pedido.quantidade, 
+produto.nome as produto,
+produto_pedido.quantidade as quantidade_produto,
+produto.valor_unitario,
 (produto_pedido.quantidade * produto.valor_unitario) as valor_nota 
 from cliente c
 inner join pedido on pedido.id_cliente = c.id
 inner join produto_pedido on produto_pedido.id_pedido = pedido.id
 inner join produto on produto.id = produto_pedido.id_produto 
--- Selecionando nota fiscal de um cliente 
---where c.nome_completo = 'Mario'
---and pedido.data_pedido = '07/05/2022'
 
 
 
+------------ Consulta nota fiscal por código do produto --------------------
 
+select *
+from registro_nota 
+where código_pedido = 10
