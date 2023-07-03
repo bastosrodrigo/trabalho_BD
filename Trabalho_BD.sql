@@ -53,6 +53,11 @@ create table produto_pedido(
 	foreign key(id_pedido) references pedido(id)
 );
 
+alter table produto_pedido add column
+quantidade integer 
+
+
+
 --inserção de dados nas tabelas (pelo menos 5 registros em cada uma) (DML)
 
 
@@ -73,11 +78,21 @@ insert into funcionario (nome,cpf) values
 
 
 insert into pedido (data_pedido,id_funcionario,id_cliente) values
-('26/02/1997',1,1),
-('07/05/2022',2,5),
-('08/05/2015',5,3),
-('06/07/2015',2,3),
-('07/05/2015',4,3);
+('26/02/1997',
+(select id from funcionario where nome = 'Pedro' ),
+(select id from cliente where nome_completo = 'Nelson' )),
+('07/05/2022',
+(select id from funcionario where nome = 'João' ),
+(select id from cliente where nome_completo = 'Mario' )),
+('08/05/2015',
+(select id from funcionario where nome = 'Marcos' ),
+(select id from cliente where nome_completo = 'João' )),
+('06/07/2015',
+(select id from funcionario where nome = 'Francisco' ),
+(select id from cliente where nome_completo = 'Pedro' )),
+('07/05/2015',
+(select id from funcionario where nome = 'Marcos' ),
+(select id from cliente where nome_completo = 'Pedro' ));
 
 insert into produto (nome,descricao,quantidade_no_estoque,data_de_fabricacao,valor_unitario,id_categoria,id_funcionario) values
 ('Computador','Um belo computador',205,'14/02/1998',2500,1,2),
@@ -93,12 +108,16 @@ insert into categoria (nome,descricao) values
 ('alimentos','revenda'),
 ('computadores','estoque');
 
-insert into produto_pedido (id_produto,id_pedido) values
-(1,6),
-(2,4),
-(3,2),
-(8,1),
-(1,5);
+insert into produto_pedido (id_produto,id_pedido,quantidade) values
+((select id from produto where nome = 'Computador' ),9,3),
+((select id from produto where nome = 'Navio' ),10,5),
+((select id from produto where nome ='Carro'),11,4),
+((select id from produto where nome = 'Tesoura'),12,2),
+((select id from produto where nome ='Pá'),13,1)
+
+insert into produto_pedido (id_produto,id_pedido,quantidade) values
+((select id from produto where nome = 'Computador' ),10,3)
+
 
 --atualização em algum registro em uma tabela (DML)
 
@@ -130,6 +149,86 @@ where id = 2
 
 
 
+-- SQL querry Pelo menos 2 com algum tipo de junção
 
+SELECT p.data_pedido,
+		c.nome_completo
+		FROM cliente c INNER JOIN 
+		pedido p ON 
+		p.id_cliente = c.id
+
+
+SELECT c.nome as nome_categoria,
+		p.nome as nome_produto
+		FROM categoria c INNER JOIN 
+		produto p ON 
+		p.id_categoria = c.id
+
+
+
+-- SQL Query Pelo menos 1 com usando count() e group by()
+
+select id, count(*)
+from cliente 
+where id in (select id
+					from cliente 
+					where nome_completo like '%A%')
+group by id
+
+
+--Uma consulta livre
+
+select nome_completo 
+from cliente 
+where nome_completo like 'N%' 
+
+
+----------------- Registro de nota fiscal ---------------------
+
+create view registro_nota as select c.nome_completo,
+c.cpf,
+produto_pedido.id as código_pedido,
+pedido.data_pedido as Data_pedido,
+produto.nome as produto,
+produto_pedido.quantidade as quantidade_produto,
+produto.valor_unitario,
+(produto_pedido.quantidade * produto.valor_unitario) as valor_nota 
+from cliente c
+inner join pedido on pedido.id_cliente = c.id
+inner join produto_pedido on produto_pedido.id_pedido = pedido.id
+inner join produto on produto.id = produto_pedido.id_produto 
+
+
+------------ Consulta nota fiscal por código do produto --------------------
+
+select *
+from registro_nota 
+where código_pedido = 10
+
+update cliente 
+set cpf = '115.670.600-99'
+where id = 1
+
+update cliente 
+set cpf = '162.058.980-04'
+where id = 2
+
+
+update cliente 
+set cpf = '791.696.380-98'
+where id = 3
+
+
+update cliente 
+set cpf = '462.758.980-04'
+where id = 4
+
+update cliente 
+set cpf =  '069.264.910-70'
+where id = 5
+
+update cliente 
+set cpf =  '621.981.150-00'
+where id = 6
 
 
